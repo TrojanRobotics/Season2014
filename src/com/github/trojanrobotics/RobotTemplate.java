@@ -4,7 +4,7 @@
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
-package edu.wpi.first.wpilibj.templates;
+package com.github.trojanrobotics;
 
 import com.sun.squawk.platform.posix.natives.Time;
 import edu.wpi.first.wpilibj.Compressor;
