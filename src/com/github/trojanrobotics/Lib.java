@@ -1,5 +1,3 @@
-
-
 package com.github.trojanrobotics;
 
 import com.sun.squawk.util.MathUtils;

@@ -4,10 +4,7 @@ import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Joystick;
-<<<<<<< HEAD
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-=======
->>>>>>> 375ba688f8d241b605a147ce7d9275ffa7cd6a4a
 
 public class BCHSBot extends IterativeRobot {
 	Joystick mainJoystick, secondaryJoystick;
