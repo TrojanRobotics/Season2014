@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -97,7 +98,9 @@ public class RobotTemplate extends IterativeRobot {
 
 //		servo9.set(servoAngle);
 //		System.out.println("Raw value:     " + servoAngle);
-//		System.out.println("Rounded value: " + getThreshold(servoAngle));
+		SmartDashboard.putNumber("Servo Y:", getThreshold(servoAngleY));
+		SmartDashboard.putNumber("Servo X:", getThreshold(servoAngleX));
+
 		servoY.set(getThreshold(servoAngleY));
 		servoX.set(getThreshold(servoAngleX));
 
@@ -109,10 +112,11 @@ public class RobotTemplate extends IterativeRobot {
 	 * This function is called periodically during test mode
 	 */
 	public void testPeriodic() {
-		while (button1.get()) {
-
-			System.out.println(compressor1.enabled());
-		}
-		compressor1.stop();
+//		while (button1.get()) {
+//
+//			System.out.println(compressor1.enabled());
+//		}
+//		compressor1.stop();
+		SmartDashboard.putString("Hey", "Hey");
 	}
 }
