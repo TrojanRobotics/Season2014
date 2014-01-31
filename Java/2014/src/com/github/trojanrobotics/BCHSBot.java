@@ -13,31 +13,30 @@ public class BCHSBot extends IterativeRobot {
 	Compressor compressor1 = new Compressor(Config.COMPRESSOR_RIGHT[0], Config.COMPRESSOR_RIGHT[1]);
 	double servoAngleY;
 	double servoAngleX;
-        
 	double x, y;
 	Chasis chasis = new Chasis(Config.LDRIVE[0], Config.LDRIVE[1], Config.RDRIVE[0], Config.RDRIVE[1]);
-
+	
 	public void robotInit() {
 		mainJoystick = new Joystick(Config.MAIN_JOYSTICK);
 		secondaryJoystick = new Joystick(Config.SECONDARY_JOYSTICK);
-		
 		servoAngleY = servoY.getAngle();
-		servoAngleX = servoX.getAngle();
+		servoAngleX = servoX.getAngle();	
 	}
 
 	/**
 	 * This function is called periodically during autonomous
 	 */
-	public void autonomousPeriodic() {
-	}
-
-	public void teleopPeriodic() {
+	public void autonomousPeriodic() 
+	{
 		
+	}
+	
+	public void teleopPeriodic() {
 		servoAngleY = servoY.get();
 		servoAngleX = servoX.get();
 		double joyStickY = Math.floor(mainJoystick.getY());
 		double joyStickX = Math.floor(mainJoystick.getX());
-
+		
 		if (joyStickY > 0.5) {
 			servoAngleY += 0.005;
 			System.out.println("Adding to the servoAngle\n");
@@ -53,8 +52,6 @@ public class BCHSBot extends IterativeRobot {
 			servoAngleX -= 0.005;
 			System.out.println("Subtracting from the servoAngle\n");
 		}
-
-		System.out.println("servoAngle " + servoAngleX);
 		
 		servoY.set(Lib.limitOutput(servoAngleY));
 		servoX.set(Lib.limitOutput(servoAngleX));
@@ -68,8 +65,8 @@ public class BCHSBot extends IterativeRobot {
         x = Lib.signSquare(x);
         y = Lib.signSquare(y);
         
-        System.out.println(y);
-        System.out.println(x);
+        //System.out.println(y);
+        //System.out.println(x);
         
         chasis.rightSide.set(Lib.limitOutput(y + x));
         chasis.leftSide.set(-Lib.limitOutput(y - x));
