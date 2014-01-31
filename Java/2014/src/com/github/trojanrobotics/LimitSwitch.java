@@ -1,17 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package com.github.trojanrobotics;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 
-/**
- *
- * @author mattbettinson
- */
+
 public class LimitSwitch {
     DigitalInput digital_Input;
     boolean isInverted;
@@ -24,18 +15,18 @@ public class LimitSwitch {
         return digital_Input.get();
     }
     
-    public boolean setInverted(boolean value, boolean isInverted) {
+    public void setInverted(boolean value, boolean invert) {
         if (value) {
-            if (isInverted) {
-                return false;
+            if (invert) {
+                isInverted = false;
             } else {
-                return true;
+                isInverted = true;
             }
         } else {
-            if (isInverted) {
-                return true;
+            if (invert) {
+                isInverted = true;
             } else {
-                return false;
+                isInverted = false;
             }
         }
     }
