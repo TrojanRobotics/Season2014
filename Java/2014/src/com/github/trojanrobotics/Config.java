@@ -7,7 +7,7 @@ public class Config {
 	static final int MAIN_JOYSTICK = 1;
 	static final int SECONDARY_JOYSTICK = 2;
 	
-	static final int[] COMPRESSOR_RIGHT = {4, 8};
+	static final int[] COMPRESSOR = {4, 8};
 	static final int[] LDRIVE = {1, 2};
 	static final int[] RDRIVE = {3, 4};
         
@@ -15,12 +15,15 @@ public class Config {
         static final int RETRIEVAL_MOTOR = 4; 
         static final int BELT_MOTOR = 5; 
         static final int[] ULTRASONIC = {6, 7};
-
-        
-        static final int ENCODER_LEFT_CHANNEL = 8;
-        static final int ENCODER_RIGHT_CHANNEL = 9;
-        
+      
+        static final int[] LEFT_ENCODER = {1,2};
+        static final int[] RIGHT_ENCODER = {3,4};
+            
         static final int WINCH_MOTOR = 10;
-        
         static final int WINCH_SWITCH = 11;
+        
+        //pid stuffz
+        static final double[] PID = { 0.0, 0.0, 0.0 };
+        static final double LEFT_DRIVE_DPP = 5.0;
+        static final double RIGHT_DRIVE_DPP = 5.0;
 }
