@@ -24,7 +24,6 @@ public class Config {
         
         //pid stuffz
         static final double[] PID = { 0.0, 0.0, 0.0 };
-        static final double leftDriveDPP = 5.0;
-        static final double rightDriveDPP = 5.0;
-	//static final double[] SHOOTER_PID = { 0.5, 0.0, 0.0 };
+        static final double LEFT_DRIVE_DPP = 5.0;
+        static final double RIGHT_DRIVE_DPP = 5.0;
 }

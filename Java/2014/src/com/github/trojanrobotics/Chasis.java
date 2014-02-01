@@ -30,6 +30,7 @@ public class Chasis
                 compressor.start();
                 leftSideEncoder.start();
                 rightSideEncoder.start();
+                
         }                                                                                                      
         
         public void set(double speed)
@@ -47,11 +48,13 @@ public class Chasis
                 leftSideEncoder.reset();
                 rightSideEncoder.reset();
         }
-      
+        
         public void setSetpoint(double setPoint)
         {
-                leftSidePID.setSetpoint(setPoint);
-                rightSidePID.setSetpoint(-setPoint);
+            leftSidePID.setSetpoint(setPoint);
+            rightSidePID.setSetpoint(-setPoint);
+            if (!leftSidePID.isEnable()) leftSidePID.enable();
+            if (!rightSidePID.isEnable()) rightSidePID.enable();
         }
                 
         public void stop()
