@@ -2,21 +2,10 @@ package com.github.trojanrobotics;
 
 import edu.wpi.first.wpilibj.SpeedController;
 
-public class SafetyObject {
+public abstract class SafetyObject {
     SpeedController controller;
    
-    public SafetyObject (SpeedController c)
-    {
-        controller = c;
-    }
+    public abstract void stop();
     
-    public void stop()
-    {
-        
-    }
-    
-    public String getDescription()
-    {
-        return "This is safety object";
-    }
+    public abstract String getDescription();
 }

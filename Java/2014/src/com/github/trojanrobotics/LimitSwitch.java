@@ -1,15 +1,13 @@
 package com.github.trojanrobotics;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.SpeedController;
 import java.util.TimerTask;
 
 
-public class LimitSwitch {
+public class LimitSwitch extends SafetyObject {
     DigitalInput digital_Input;
     boolean isInverted;
-    Thread limitSwitchThread;
     SpeedController motor;
     java.util.Timer controlLoop;
     long period = 1;
@@ -43,26 +41,22 @@ public class LimitSwitch {
     }
     
     public boolean get() {
-        return digital_Input.get();
+        if (this.isInverted) {
+            return !digital_Input.get();
+        } else {
+            return digital_Input.get();
+        }
     }
     
-    public void setInverted(boolean value, boolean invert) {
-        if (value) {
-            if (invert) {
-                isInverted = false;
-            } else {
-                isInverted = true;
-            }
-        } else {
-            if (invert) {
-                isInverted = true;
-            } else {
-                isInverted = false;
-            }
-        }
+    public void setInverted(boolean inverted) {
+        this.isInverted = inverted;
+    }
+    
+    public void stop() {
+        motor.disable();
     }
         
     public String getDescription() {
-       return "LimitSwitch class that makes sure the motors don't destroy themselves.";
+       return "LimitSwitch";
     }
 }
