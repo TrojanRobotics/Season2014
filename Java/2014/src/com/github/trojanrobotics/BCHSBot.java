@@ -1,10 +1,7 @@
 package com.github.trojanrobotics;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.Jaguar;
-import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.DriverStationLCD;
 
@@ -90,7 +87,6 @@ public class BCHSBot extends IterativeRobot {
 //		System.out.println("Distance and rate" + chasis.rightSideEncoder.getDistance() + "    " + chasis.rightSideEncoder.getRate());
 
         
-
         if (mainJoystick.getRawButton(1)) //Shoot
         {
             chasis.retrieval.setArmPosition(Retrieval.Direction.up);
@@ -105,5 +101,4 @@ public class BCHSBot extends IterativeRobot {
     public void testPeriodic() {
 
     }
-
 }

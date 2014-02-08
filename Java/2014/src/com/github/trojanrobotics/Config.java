@@ -3,7 +3,6 @@ package com.github.trojanrobotics;
 public class Config {
 	static final boolean TEST_BOT = false;
         static final int WINCH_WAIT = 5000;
-        
 	
 	static final int MAIN_JOYSTICK = 1;
 	static final int SECONDARY_JOYSTICK = 2;
@@ -34,6 +33,4 @@ public class Config {
 	static final double[] PID = { 0.15, 0.0, 1.0 };
 	static final double LEFT_DRIVE_DPP = (Math.PI * 4.0) / 360;
 	static final double RIGHT_DRIVE_DPP = (Math.PI * 4.0) / 360;
-
-        
 }
