@@ -1,33 +1,62 @@
 package com.github.trojanrobotics;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.SpeedController;
+import java.util.TimerTask;
 
 
-public class LimitSwitch {
+public class LimitSwitch extends SafetyObject {
     DigitalInput digital_Input;
     boolean isInverted;
+    SpeedController motor;
+    java.util.Timer controlLoop;
+    long period = 1;
     
-    public LimitSwitch(int port) {
-        digital_Input = new DigitalInput(port);
-        isInverted = false;
-    }
-    public boolean get() {
-        return digital_Input.get();
-    }
-    
-    public void setInverted(boolean value, boolean invert) {
-        if (value) {
-            if (invert) {
-                isInverted = false;
-            } else {
-                isInverted = true;
+    private class LimitTask extends TimerTask {
+        
+        private LimitSwitch l_switch;
+        
+        public LimitTask(LimitSwitch lS) {
+            if (lS == null) {
+                throw new NullPointerException("Given Limit Switch  was null");
             }
-        } else {
-            if (invert) {
-                isInverted = true;
-            } else {
-                isInverted = false;
+            l_switch = lS;
+        }
+        
+        public void run() {
+            if (l_switch.get())
+            {
+                motor.disable();
             }
         }
+        
+    }
+    
+    public LimitSwitch(int channel, SpeedController m) {
+        digital_Input = new DigitalInput(channel);
+        isInverted = false;
+        motor = m;
+        
+        controlLoop.schedule(new LimitTask(this), 0L, (long) (period *1000));
+    }
+    
+    public boolean get() {
+        if (this.isInverted) {
+            return !digital_Input.get();
+        } else {
+            return digital_Input.get();
+        }
+    }
+    
+    public void setInverted(boolean inverted) {
+        this.isInverted = inverted;
+    }
+    
+    public void stop() {
+        motor.disable();
+    }
+        
+    public String getDescription() {
+       return "LimitSwitch";
     }
 }
