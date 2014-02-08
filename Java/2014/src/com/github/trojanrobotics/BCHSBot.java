@@ -15,7 +15,7 @@ public class BCHSBot extends IterativeRobot {
 	double x, y;
 	Chasis chasis = new Chasis(Config.LDRIVE, Config.RDRIVE, Config.ULTRASONIC, Config.LEFT_ENCODER, Config.RIGHT_ENCODER);
 	boolean autoRunOnce;
-	
+
 	public void robotInit() {
 		mainJoystick = new Joystick(Config.MAIN_JOYSTICK);
 		secondaryJoystick = new Joystick(Config.SECONDARY_JOYSTICK);
@@ -67,6 +67,7 @@ public class BCHSBot extends IterativeRobot {
 		servoAngleX = servoX.get();
 		double joyStickY = Math.floor(mainJoystick.getY());
 		double joyStickX = Math.floor(mainJoystick.getX());
+		
 		
 //		if (joyStickY > 0.5) {
 //			servoAngleY += 0.005;
