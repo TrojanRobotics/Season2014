@@ -1,6 +1,8 @@
 package com.github.trojanrobotics;
 
 public class Config {
+        static final int WINCH_WAIT = 5000;
+        
 	static final int SERVO_Y = 9;
 	static final int SERVO_X = 10;
 	
@@ -23,4 +25,9 @@ public class Config {
         static final int WINCH_MOTOR = 10;
         
         static final int WINCH_SWITCH = 11;
+        
+        static final int DIGITAL_INPUT = 12;
+        static final int WINCH_LIMITSWITCH = 13;
+        
+        
 }
