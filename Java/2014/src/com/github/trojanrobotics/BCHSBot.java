@@ -65,14 +65,13 @@ public class BCHSBot extends IterativeRobot {
 	}
 	
 	public void teleopPeriodic() {
-		if(secondaryJoystick.getRawButton(Config.HOME_POSITION)){
-			chasis.retrieval.setAngleRetrieval(180);
-		}
-		if(secondaryJoystick.getRawButton(Config.SHOOT_POSITION)){
-			chasis.retrieval.setAngleRetrieval(90);
-		}
-		if(secondaryJoystick.getRawButton(Config.RETRIEVE_POSITION)){
-			chasis.retrieval.setAngleRetrieval(0);
+		//need to call setEnabled on retrieval
+		if(secondaryJoystick.getRawButton(Config.HOME_POSITION_BUTTON)){
+			chasis.retrieval.setAngleRetrieval(Config.HOME_POSITION);
+		} else if(secondaryJoystick.getRawButton(Config.SHOOT_POSITION_BUTTON)){
+			chasis.retrieval.setAngleRetrieval(Config.SHOOT_POSITION);
+		} else if(secondaryJoystick.getRawButton(Config.RETRIEVE_POSITION_BUTTON)){
+			chasis.retrieval.setAngleRetrieval(Config.RETRIEVE_POSITION);
 		}
 		
 		x = mainJoystick.getX();

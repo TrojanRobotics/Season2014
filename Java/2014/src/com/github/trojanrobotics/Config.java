@@ -9,8 +9,8 @@ public class Config {
 	static final int[] COMPRESSOR = {5, 8};
 	
 //	Motors: Main Bot
-	static final int[] LDRIVE = {3, 1};
-	static final int[] RDRIVE = {4, 2};
+	static final int[] LDRIVE = {3, 4};
+	static final int[] RDRIVE = {1, 2};
 	
 //	Motors: Test Bot
 	static final int[] TEST_LDRIVE = {1, 2};
@@ -37,7 +37,11 @@ public class Config {
 	static final double LEFT_DRIVE_DPP = (Math.PI * 4.0) / 360;
 	static final double RIGHT_DRIVE_DPP = (Math.PI * 4.0) / 360;
 	
-	static final int SHOOT_POSITION = 6;
-	static final int RETRIEVE_POSITION = 7;
-	static final int HOME_POSITION = 8;
+	static final int SHOOT_POSITION = 90;
+	static final int RETRIEVE_POSITION = 30;
+	static final int HOME_POSITION = 180;
+	
+	static final int SHOOT_POSITION_BUTTON = 6;
+	static final int RETRIEVE_POSITION_BUTTON = 7;
+	static final int HOME_POSITION_BUTTON = 8;
 }
