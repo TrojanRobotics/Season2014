@@ -1,15 +1,15 @@
 package com.github.trojanrobotics;
 
-import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.Solenoid;
 
 public class Winch {
-    Talon winchMotor;
+    Jaguar winchMotor;
     LimitSwitch limitSwitch;
     Solenoid engageSolenoid, releaseSolenoid;
     
     public Winch (int jagChannel, int limitChannel) {
-        winchMotor = new Talon(jagChannel);
+        winchMotor = new Jaguar(jagChannel);
         limitSwitch = new LimitSwitch(limitChannel);
         engageSolenoid = new Solenoid(1);
         releaseSolenoid = new Solenoid(2);
