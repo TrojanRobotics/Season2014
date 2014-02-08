@@ -6,46 +6,46 @@ import edu.wpi.first.wpilibj.SpeedController;
 
 public class Bundle implements PIDOutput, SpeedController
 {
-        protected Talon jagOne, jagTwo;
+        protected Talon talOne, talTwo;
         
         public Bundle(int channelOne, int channelTwo)
         {
-                jagOne = new Talon(channelOne);
-                jagTwo = new Talon(channelTwo);
+                talOne = new Talon(channelOne);
+                talTwo = new Talon(channelTwo);
         }
         
         public double get()
         {
-                return jagOne.getSpeed();
+                return talOne.getSpeed();
         }
         
         public void set(double speed)
         {
-                jagOne.set(speed);
-                jagTwo.set(speed);
+                talOne.set(speed);
+                talTwo.set(speed);
         }
         
         public void set(double speed, byte syncGroup)
         {
-                jagOne.set(speed);
-                jagTwo.set(speed);
+                talOne.set(speed);
+                talTwo.set(speed);
         }
         
         public void stop()
         {
-                jagOne.set(0.0);
-                jagTwo.set(0.0);
+                talOne.set(0.0);
+                talTwo.set(0.0);
         }
         
         public void pidWrite(double output)
         {
-                jagOne.pidWrite(output);
-                jagTwo.pidWrite(output);
+                talOne.pidWrite(output);
+                talTwo.pidWrite(output);
         }
         
         public void disable()
         {
-                jagOne.disable();
-                jagTwo.disable();
+                talOne.disable();
+                talTwo.disable();
         }
 }
