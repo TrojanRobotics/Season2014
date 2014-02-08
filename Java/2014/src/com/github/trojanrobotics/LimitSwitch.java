@@ -34,10 +34,9 @@ public class LimitSwitch {
         
     }
     
-    public LimitSwitch(int port, SpeedController m) {
-        digital_Input = new DigitalInput(port);
+    public LimitSwitch(int channel, SpeedController m) {
+        digital_Input = new DigitalInput(channel);
         isInverted = false;
-        limitSwitchThread = new Thread();
         motor = m;
         
         controlLoop.schedule(new LimitTask(this), 0L, (long) (period *1000));
@@ -64,6 +63,6 @@ public class LimitSwitch {
     }
         
     public String getDescription() {
-       return "Matt is dope";
+       return "LimitSwitch class that makes sure the motors don't destroy themselves.";
     }
 }
