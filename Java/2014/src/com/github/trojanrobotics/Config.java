@@ -1,8 +1,7 @@
 package com.github.trojanrobotics;
 
 public class Config {
-	static final int SERVO_Y = 9;
-	static final int SERVO_X = 10;
+	static final boolean TEST_BOT = false;
 	
 	static final int MAIN_JOYSTICK = 1;
 	static final int SECONDARY_JOYSTICK = 2;
@@ -14,8 +13,8 @@ public class Config {
 	static final int[] RDRIVE = {4, 2};
 	
 //	Motors: Test Bot
-//	static final int[] LDRIVE = {1, 2};
-//	static final int[] RDRIVE = {3, 4};
+	static final int[] TEST_LDRIVE = {1, 2};
+	static final int[] TEST_RDRIVE = {3, 4};
         
 	//TODO: FIND THE REAL NUMBERS HERE 
     static final int RETRIEVAL_MOTOR = 4; 

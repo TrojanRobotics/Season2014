@@ -19,25 +19,25 @@ public class Chasis
         
         public Chasis(int[] rightChannels, int[] leftChannels ,int[] ultraSonicPingAndEcho, int[] leftEncoderChannels, int[] rightEncoderChannels)
         {
-            this.leftSide = new Bundle(leftChannels[0], leftChannels[1]);
-            this.rightSide = new Bundle(rightChannels[0], rightChannels[1]);   
+			this.leftSide = new Bundle(leftChannels[0], leftChannels[1]);
+			this.rightSide = new Bundle(rightChannels[0], rightChannels[1]);   
 			leftSideEncoder = new Encoder(leftEncoderChannels[0], leftEncoderChannels[1]);
-            rightSideEncoder = new Encoder(rightEncoderChannels[0], rightEncoderChannels[1]);
+			rightSideEncoder = new Encoder(rightEncoderChannels[0], rightEncoderChannels[1]);
 			leftSideEncoder.setPIDSourceParameter(PIDSource.PIDSourceParameter.kDistance);
 			rightSideEncoder.setPIDSourceParameter(PIDSource.PIDSourceParameter.kDistance);
-            leftSideEncoder.setDistancePerPulse(Config.LEFT_DRIVE_DPP);
-            rightSideEncoder.setDistancePerPulse(Config.RIGHT_DRIVE_DPP); 
-			//leftSideEncoder.setReverseDirection(true);
-			//rightSideEncoder.setReverseDirection(true);
-			//leftSideEncoder.start();
-            //rightSideEncoder.start();
-			//ultrasonic = new Ultrasonic(ultraSonicPingAndEcho[0], ultraSonicPingAndEcho[1]);
+			leftSideEncoder.setDistancePerPulse(Config.LEFT_DRIVE_DPP);
+			rightSideEncoder.setDistancePerPulse(Config.RIGHT_DRIVE_DPP); 
+			leftSideEncoder.setReverseDirection(true);
+			rightSideEncoder.setReverseDirection(true);
+			leftSideEncoder.start();
+			rightSideEncoder.start();
+			ultrasonic = new Ultrasonic(ultraSonicPingAndEcho[0], ultraSonicPingAndEcho[1]);
 			rightSidePID = new PIDController(Config.PID[0], Config.PID[1], Config.PID[2], rightSideEncoder, rightSide);
 			leftSidePID = new PIDController(Config.PID[0], Config.PID[1], Config.PID[2], leftSideEncoder, leftSide);
-			//compressor = new Compressor(Config.COMPRESSOR[0], Config.COMPRESSOR[1]);
-            //winch = new Winch(Config.WINCH_MOTOR, Config.WINCH_SWITCH);
-            //compressor.start();
-            //driverStationLCD = DriverStationLCD.getInstance();       
+			compressor = new Compressor(Config.COMPRESSOR[0], Config.COMPRESSOR[1]);
+			winch = new Winch(Config.WINCH_MOTOR, Config.WINCH_SWITCH);
+			compressor.start();
+			driverStationLCD = DriverStationLCD.getInstance();       
         }                                                                                                      
         
         public void set(double speed)

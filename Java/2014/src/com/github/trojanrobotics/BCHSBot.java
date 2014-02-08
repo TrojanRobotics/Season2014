@@ -5,23 +5,24 @@ import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.DriverStationLCD;
 
 public class BCHSBot extends IterativeRobot {
 	Joystick mainJoystick, secondaryJoystick;
-	Servo servoY = new Servo(Config.SERVO_Y);
-	Servo servoX = new Servo(Config.SERVO_X);
 	double servoAngleY;
 	double servoAngleX;
 	double x, y;
-	Chasis chasis = new Chasis(Config.LDRIVE, Config.RDRIVE, Config.ULTRASONIC, Config.LEFT_ENCODER, Config.RIGHT_ENCODER);
+	Chasis chasis;
 	boolean autoRunOnce;
 
 	public void robotInit() {
 		mainJoystick = new Joystick(Config.MAIN_JOYSTICK);
 		secondaryJoystick = new Joystick(Config.SECONDARY_JOYSTICK);
-		servoAngleY = servoY.getAngle();
-		servoAngleX = servoX.getAngle();	
-		
+		if(Config.TEST_BOT){
+			chasis = new Chasis(Config.TEST_LDRIVE, Config.TEST_RDRIVE, Config.ULTRASONIC, Config.LEFT_ENCODER, Config.RIGHT_ENCODER);
+		} else {
+			chasis = new Chasis(Config.LDRIVE, Config.RDRIVE, Config.ULTRASONIC, Config.LEFT_ENCODER, Config.RIGHT_ENCODER);
+		}
 		LiveWindow.addActuator("Left Side", "Value", chasis.leftSide.talOne);
 		LiveWindow.addActuator("Left Side", "Value", chasis.leftSide.talTwo);
 		LiveWindow.addActuator("Right Side", "Value", chasis.leftSide.talOne);
@@ -32,7 +33,7 @@ public class BCHSBot extends IterativeRobot {
 	
 	public void disabledPeriodic(){
 		chasis.stop();
-		//chasis.reset();
+		chasis.reset();
 		autoRunOnce = true;
     }
 	
@@ -63,34 +64,6 @@ public class BCHSBot extends IterativeRobot {
 	}
 	
 	public void teleopPeriodic() {
-		servoAngleY = servoY.get();
-		servoAngleX = servoX.get();
-		double joyStickY = Math.floor(mainJoystick.getY());
-		double joyStickX = Math.floor(mainJoystick.getX());
-		
-		
-//		if (joyStickY > 0.5) {
-//			servoAngleY += 0.005;
-//			System.out.println("Adding to the servoAngle\n");
-//		} else if (joyStickY < -0.5) {
-//			servoAngleY -= 0.005;
-//			System.out.println("Subtracting from the servoAngle\n");
-//		}
-//
-//		if (joyStickX > 0.5) {
-//			servoAngleX += 0.005;
-//			System.out.println("Adding to the servoAngle\n");
-//		} else if (joyStickX < -0.5) {
-//			servoAngleX -= 0.005;
-//			System.out.println("Subtracting from the servoAngle\n");
-//		}
-//		
-//		servoY.set(Lib.limitOutput(servoAngleY));
-//		servoX.set(Lib.limitOutput(servoAngleX));
-		
-		SmartDashboard.putNumber("Servo Y:", Lib.limitOutput(servoAngleY));
-		SmartDashboard.putNumber("Servo X:", Lib.limitOutput(servoAngleX));
-		
 		x = mainJoystick.getX();
         y = mainJoystick.getY();
 
@@ -121,6 +94,6 @@ public class BCHSBot extends IterativeRobot {
 	 * This function is called periodically during test mode
 	 */
 	public void testPeriodic() {
-		SmartDashboard.putNumber("Adam", 5);
+		
 	}
 }
