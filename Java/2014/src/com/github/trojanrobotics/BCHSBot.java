@@ -1,6 +1,7 @@
 package com.github.trojanrobotics;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -64,15 +65,14 @@ public class BCHSBot extends IterativeRobot {
 	}
 	
 	public void teleopPeriodic() {
-		x = mainJoystick.getX();
+	x = mainJoystick.getX();
         y = mainJoystick.getY();
 
         x = Lib.signSquare(x);
         y = Lib.signSquare(y);
-        
+
         //System.out.println(y);
         //System.out.println(x);
-        
         chasis.rightSide.set(Lib.limitOutput(y + x));
         chasis.leftSide.set(-Lib.limitOutput(y - x));
 		
@@ -88,12 +88,22 @@ public class BCHSBot extends IterativeRobot {
 //		chasis.driverStationLCD.updateLCD();
 //		
 //		System.out.println("Distance and rate" + chasis.rightSideEncoder.getDistance() + "    " + chasis.rightSideEncoder.getRate());
-	}
 
-	/**
-	 * This function is called periodically during test mode
-	 */
-	public void testPeriodic() {
-		
-	}
+        
+
+        if (mainJoystick.getRawButton(1)) //Shoot
+        {
+            chasis.retrieval.setArmPosition(Retrieval.Direction.up);
+            chasis.retrieval.winchMotor.release();
+            chasis.retrieval.startTimer();
+        }
+    }
+
+    /**
+     * This function is called periodically during test mode
+     */
+    public void testPeriodic() {
+
+    }
+
 }

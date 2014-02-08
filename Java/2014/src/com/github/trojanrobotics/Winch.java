@@ -6,35 +6,27 @@ import edu.wpi.first.wpilibj.Solenoid;
 public class Winch {
     Jaguar winchMotor;
     LimitSwitch limitSwitch;
-    Solenoid engageSolenoid, releaseSolenoid;
+    Solenoid releaseSolenoid, retractSolenoid;
     
-    public Winch (int jagChannel, int limitChannel) {
-        winchMotor = new Jaguar(jagChannel);
-        limitSwitch = new LimitSwitch(limitChannel);
-        engageSolenoid = new Solenoid(1);
-        releaseSolenoid = new Solenoid(2);
-        engageSolenoid.set(true);
-        releaseSolenoid.set(false);
+    public Winch (int winchChannel, int limitChannel, int releaseChannel, int retractChannel) {
+        winchMotor = new Jaguar(winchChannel);
+        limitSwitch = new LimitSwitch(limitChannel, winchMotor);
+        releaseSolenoid = new Solenoid(releaseChannel);
+        retractSolenoid = new Solenoid(retractChannel);
     }
     
-    public void retract(double speed)
-    {
-        //set motor speed to pull down winch
-        releaseSolenoid.set(false);
-        engageSolenoid.set(true);
-        winchMotor.set(speed);
-    }
-    
-    public void stop()
-    {
-        //stop the motor
-       winchMotor.set(0.0);
-    }
-    
-    public void release()
-    {
-        //release the winch to fire the ball
-        engageSolenoid.set(false);
+    public void release() {
+        winchMotor.stopMotor();
+        retractSolenoid.set(false);
         releaseSolenoid.set(true);
+    }
+    public void retract() {
+        releaseSolenoid.set(false);
+        retractSolenoid.set(true);
+        winchMotor.set(0.5);
+    }
+    
+    public void stop() {
+        winchMotor.stopMotor();
     }
 }

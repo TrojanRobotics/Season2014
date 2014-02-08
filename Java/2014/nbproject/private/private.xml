@@ -3,10 +3,17 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/C:/Users/Robotic2/Documents/GitHub/Season2014/Java/2014/src/com/github/trojanrobotics/Config.java</file>
             <file>file:/C:/Users/Robotic2/Documents/GitHub/Season2014/Java/2014/src/com/github/trojanrobotics/BCHSBot.java</file>
             <file>file:/C:/Users/Robotic2/Documents/GitHub/Season2014/Java/2014/src/com/github/trojanrobotics/Chasis.java</file>
             <file>file:/C:/Users/Robotic2/Documents/GitHub/Season2014/Java/2014/src/com/github/trojanrobotics/Bundle.java</file>
+=======
+            <file>file:/Users/mattbettinson/Documents/Code/Robotics/Season2014/Java/2014/src/com/github/trojanrobotics/BCHSBot.java</file>
+            <file>file:/Users/mattbettinson/Documents/Code/Robotics/Season2014/Java/2014/src/com/github/trojanrobotics/Config.java</file>
+            <file>file:/Users/mattbettinson/Documents/Code/Robotics/Season2014/Java/2014/src/com/github/trojanrobotics/LimitSwitch.java</file>
+            <file>file:/Users/mattbettinson/Documents/Code/Robotics/Season2014/Java/2014/src/com/github/trojanrobotics/Chasis.java</file>
+>>>>>>> Added WinchTask, which motors the motors and allows the winch and retrieval systems to retract and release without harming the bot
         </group>
     </open-files>
 </project-private>
