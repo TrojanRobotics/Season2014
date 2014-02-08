@@ -1,19 +1,17 @@
 package com.github.trojanrobotics;
 
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.Jaguar;
+import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.Timer;
 import java.util.TimerTask;
 
 public class Retrieval {
-
-    Jaguar retrievalMotor;
-    Jaguar beltMotor;
-    Winch winchMotor;
-    Encoder encoder1;
+	Talon beltMotor, retrievalAngleMotor;
+	Potentiometer potentiometer;
+	Winch winch;
+	double potAngle;
+	
     Solenoid upSolenoid, downPiston;
-    LimitSwitch limitSwitch;
     java.util.Timer timer;
 
     protected class WinchTask extends TimerTask
@@ -24,7 +22,7 @@ public class Retrieval {
         }
         
         public void run() {
-            retrieval.winchMotor.retract();
+            retrieval.winch.retract();
             retrieval.timer.cancel();
             retrieval.timer = null;
         }
@@ -45,19 +43,13 @@ public class Retrieval {
             this.value = value;
         }
     }
-
-    public Retrieval(Jaguar rM, Jaguar bM, Encoder e1, Winch wM) {
-        retrievalMotor = rM;
-        beltMotor = bM;
-        encoder1 = e1;
-        winchMotor = wM;
-        limitSwitch = new LimitSwitch(Config.WINCH_LIMITSWITCH, wM.winchMotor);
-        timer = new java.util.Timer();
-    }
-
-    public void setRetrieval(double speed) {
-        retrievalMotor.set(speed);
-    }
+	
+	public Retrieval (int retrievalAngleChannel, int beltChannel, int potChannel, int[] winchChannels) {
+        beltMotor = new Talon(beltChannel);
+		retrievalAngleMotor = new Talon(retrievalAngleChannel);
+		potentiometer = new Potentiometer(potChannel);
+		winch = new Winch(winchChannels[0], winchChannels[1], winchChannels[2], winchChannels[3]);
+	}
 
     public void setArmPosition(Direction direction) {
         if (direction == Direction.up) {
@@ -76,4 +68,30 @@ public class Retrieval {
             timer.schedule(new WinchTask(this), Config.WINCH_WAIT, 0);
         }
     }
+	
+	public void setRetrieval(double speed) {
+        retrievalAngleMotor.set(speed);
+    }
+    
+    public void setAngleRetrieval(double angle){
+		potAngle = potentiometer.voltToAngle();
+			while (potAngle != angle) 
+			{
+				if (potAngle < angle)
+				{
+					
+					System.out.println("go forwards" + potAngle);
+				}
+				else if (potAngle > angle)
+				{
+					System.out.println("go backwards" + potAngle);
+				}
+				else
+				{
+					System.out.println("perfect" + potAngle);//stop motor
+				}
+			potAngle = potentiometer.voltToAngle();
+			} 
+	}
+    
 }
