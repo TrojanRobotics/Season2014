@@ -29,8 +29,15 @@ public class Config {
 	static final int WINCH_SWITCH = 11;
         static final int WINCH_LIMITSWITCH = 13;
         
+        static final int RELEASE_SOLENOID = 16;
+        static final int RETRACT_SOLENOID = 17;
+        
+        static final int RETRIEVAL_ENCODER[] = {18,19};
+        
 	//pid stuffz
 	static final double[] PID = { 0.15, 0.0, 1.0 };
 	static final double LEFT_DRIVE_DPP = (Math.PI * 4.0) / 360;
 	static final double RIGHT_DRIVE_DPP = (Math.PI * 4.0) / 360;
+        
+        static final int LIGHTS = 14;
 }

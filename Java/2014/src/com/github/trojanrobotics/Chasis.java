@@ -15,7 +15,7 @@ public class Chasis
         Encoder leftSideEncoder, rightSideEncoder;
         Compressor compressor;
         Winch winch;
-		DriverStationLCD driverStationLCD;
+        DriverStationLCD driverStationLCD;
         
         public Chasis(int[] rightChannels, int[] leftChannels ,int[] ultraSonicPingAndEcho, int[] leftEncoderChannels, int[] rightEncoderChannels)
         {
@@ -35,7 +35,7 @@ public class Chasis
 			rightSidePID = new PIDController(Config.PID[0], Config.PID[1], Config.PID[2], rightSideEncoder, rightSide);
 			leftSidePID = new PIDController(Config.PID[0], Config.PID[1], Config.PID[2], leftSideEncoder, leftSide);
 			compressor = new Compressor(Config.COMPRESSOR[0], Config.COMPRESSOR[1]);
-			winch = new Winch(Config.WINCH_MOTOR, Config.WINCH_SWITCH);
+//			winch = new Winch(Config.WINCH_MOTOR, Config.WINCH_SWITCH);
 			compressor.start();
 			driverStationLCD = DriverStationLCD.getInstance();       
         }                                                                                                      
@@ -72,4 +72,10 @@ public class Chasis
             leftSidePID.disable();
 			rightSidePID.disable();
         }
+
+    class retrieval {
+
+        public retrieval() {
+        }
+    }
 }

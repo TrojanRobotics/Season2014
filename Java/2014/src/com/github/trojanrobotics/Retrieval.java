@@ -46,10 +46,10 @@ public class Retrieval {
         }
     }
 
-    public Retrieval(Jaguar rM, Jaguar bM, Encoder e1, Winch wM) {
-        retrievalMotor = rM;
-        beltMotor = bM;
-        encoder1 = e1;
+    public Retrieval(int rM, int bM, int[] e1, Winch wM) {
+        retrievalMotor = new Jaguar(rM);
+        beltMotor = new Jaguar(bM);
+        encoder1 = new Encoder(e1[0], e1[1]);
         winchMotor = wM;
         limitSwitch = new LimitSwitch(Config.WINCH_LIMITSWITCH, wM.winchMotor);
         timer = new java.util.Timer();
