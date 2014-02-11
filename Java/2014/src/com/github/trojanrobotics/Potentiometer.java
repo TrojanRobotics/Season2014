@@ -13,7 +13,7 @@ public class Potentiometer
 		channel = new AnalogChannel(aChannel);
 	}
 	
-	public double voltToAngle()
+	public double getAngle()
 	{
 		int voltDegreeRound = (int) MathUtils.round(channel.getVoltage()*1000);
 		double voltRound = (double) voltDegreeRound/1000;

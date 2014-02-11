@@ -11,31 +11,31 @@ public class Retrieval {
 	double targetAngle;
 	boolean movementEnabled;
 	
-    Solenoid upSolenoid, downPiston;
-    java.util.Timer timer, retrievalTimer;
+	Solenoid upSolenoid, downPiston;
+	java.util.Timer timer, retrievalTimer;
 
     protected class WinchTask extends TimerTask
     {
-        Retrieval retrieval;
-        public WinchTask (Retrieval r){
-            retrieval = r;
+		Retrieval retrieval;
+		public WinchTask (Retrieval r){
+			retrieval = r;
         }
         
         public void run() {
-            retrieval.winch.retract();
-            retrieval.timer.cancel();
-            retrieval.timer = null;
+			retrieval.winch.retract();
+			retrieval.timer.cancel();
+			retrieval.timer = null;
         }
     }
     
     public static class Direction {
 
-        public final int value;
-        static final int up_val = 3;
-        static final int down_val = 4;
-        static final int error_val = -1;
+		public final int value;
+		static final int up_val = 3;
+		static final int down_val = 4;
+		static final int error_val = -1;
 
-        public static final Direction error = new Direction(error_val);
+		public static final Direction error = new Direction(error_val);
         public static final Direction up = new Direction(up_val);
         public static final Direction down = new Direction(down_val);
 
@@ -69,6 +69,8 @@ public class Retrieval {
 		retrievalTimer.schedule(new RetrievalTask(this), 0, (long)(0.05 * 1000));
 	}
 
+
+	
     public void setArmPosition(Direction direction) {
         if (direction == Direction.up) {
             upSolenoid.set(true);
@@ -92,17 +94,15 @@ public class Retrieval {
     }
     
     public void setAngleRetrieval(double angle){
-		targetAngle = angle;
-//		
-//			while (potAngle != angle) 
-//			{
-//				
-//			potAngle = potentiometer.voltToAngle();
-//			} 
+		targetAngle = angle; 
+		double potAngle = potentiometer.getAngle();
+		while (potAngle != angle) {
+			this.calculate();
+		} 
 	}
     private void calculate() {
 		if (movementEnabled) {
-			double potAngle = potentiometer.voltToAngle();
+			double potAngle = potentiometer.getAngle();
 			double distanceRequired = (Math.abs(targetAngle - potAngle) / targetAngle);
 			double retrievalSpeed = 0.5 * distanceRequired;
 

@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DriverStationLCD;
 import edu.wpi.first.wpilibj.PIDSource;
+import edu.wpi.first.wpilibj.Solenoid;
 
 public class Chasis 
 {
@@ -16,7 +17,8 @@ public class Chasis
         Compressor compressor;
 		DriverStationLCD driverStationLCD;
 		Retrieval retrieval;
-        
+        Solenoid gearShiftSolenoid;
+		
         public Chasis(int[] rightChannels, int[] leftChannels ,int[] ultraSonicPingAndEcho, int[] leftEncoderChannels, int[] rightEncoderChannels)
         {
 			int[] winchChannels = {Config.WINCH_MOTOR, Config.WINCH_SWITCH, Config.WINCH_RELEASE_SOLENOID, Config.WINCH_RETRACT_SOLENOID};
@@ -29,6 +31,7 @@ public class Chasis
 			rightSideEncoder.setPIDSourceParameter(PIDSource.PIDSourceParameter.kDistance);
 			leftSideEncoder.setDistancePerPulse(Config.LEFT_DRIVE_DPP);
 			rightSideEncoder.setDistancePerPulse(Config.RIGHT_DRIVE_DPP); 
+			gearShiftSolenoid = new Solenoid(Config.GEAR_SHIFT_SOLENOID);
 			leftSideEncoder.setReverseDirection(true);
 			rightSideEncoder.setReverseDirection(true);
 			leftSideEncoder.start();
@@ -40,7 +43,7 @@ public class Chasis
 			compressor.start();
 			driverStationLCD = DriverStationLCD.getInstance();       
         }                                                                                                      
-        
+ 
         public void set(double speed)
         {
             leftSide.set(speed);

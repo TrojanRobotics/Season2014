@@ -9,8 +9,12 @@ public class Config {
 	static final int[] COMPRESSOR = {5, 8};
 	
 //	Motors: Main Bot
-	static final int[] LDRIVE = {3, 4};
-	static final int[] RDRIVE = {1, 2};
+	static final int[] LDRIVE = {1, 2};
+	static final int[] RDRIVE = {3, 4};
+	
+	static final int LIGHTS = 2;
+	
+	static final int GEAR_SHIFT_SOLENOID = 5;
 	
 //	Motors: Test Bot
 	static final int[] TEST_LDRIVE = {1, 2};

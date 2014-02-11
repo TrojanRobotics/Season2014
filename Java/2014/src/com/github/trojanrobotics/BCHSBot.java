@@ -10,12 +10,17 @@ public class BCHSBot extends IterativeRobot {
 	double servoAngleY;
 	double servoAngleX;
 	double x, y;
+	double inches;
+	double retrievalAngle,joystickRetrievalAngle, retrievalMotor;
 	Chasis chasis;
 	boolean autoRunOnce;
+	Camera cam;
 
 	public void robotInit() {
 		mainJoystick = new Joystick(Config.MAIN_JOYSTICK);
 		secondaryJoystick = new Joystick(Config.SECONDARY_JOYSTICK);
+		cam = new Camera();
+		chasis.gearShiftSolenoid.set(false);
 		
 		if(Config.TEST_BOT){
 			chasis = new Chasis(Config.TEST_LDRIVE, Config.TEST_RDRIVE, Config.ULTRASONIC, Config.LEFT_ENCODER, Config.RIGHT_ENCODER);
@@ -65,12 +70,43 @@ public class BCHSBot extends IterativeRobot {
 	}
 	
 	public void teleopPeriodic() {
-		//need to call setEnabled on retrieval
+		inches = chasis.ultrasonic.getRangeInches();
+		System.out.println(inches);
+		
+		
+		retrievalAngle = chasis.retrieval.potentiometer.getAngle();
+		System.out.println(retrievalAngle);
+		if(retrievalAngle <= 20){
+			chasis.retrieval.retrievalAngleMotor.set(0.0);
+			chasis.retrieval.setAngleRetrieval(Config.RETRIEVE_POSITION);
+		} else if (retrievalAngle >= 190){
+			chasis.retrieval.retrievalAngleMotor.set(0.0);
+			chasis.retrieval.setAngleRetrieval(Config.HOME_POSITION);
+		} else {
+			joystickRetrievalAngle = secondaryJoystick.getY();
+			chasis.retrieval.retrievalAngleMotor.set(joystickRetrievalAngle);
+		}
+		
+		if (secondaryJoystick.getRawButton(10)) {
+			chasis.gearShiftSolenoid.set(true);
+		} else if (secondaryJoystick.getRawButton(11)) {
+			chasis.gearShiftSolenoid.set(false);
+		} 
+		
+		if (mainJoystick.getRawButton(6)){
+			chasis.retrieval.beltMotor.set(0.5);
+		} else if (mainJoystick.getRawButton(7)){
+			chasis.retrieval.beltMotor.set(-0.5);
+		}
+	
 		if(secondaryJoystick.getRawButton(Config.HOME_POSITION_BUTTON)){
+			chasis.retrieval.setEnabled(true);
 			chasis.retrieval.setAngleRetrieval(Config.HOME_POSITION);
 		} else if(secondaryJoystick.getRawButton(Config.SHOOT_POSITION_BUTTON)){
+			chasis.retrieval.setEnabled(true);
 			chasis.retrieval.setAngleRetrieval(Config.SHOOT_POSITION);
 		} else if(secondaryJoystick.getRawButton(Config.RETRIEVE_POSITION_BUTTON)){
+			chasis.retrieval.setEnabled(true);
 			chasis.retrieval.setAngleRetrieval(Config.RETRIEVE_POSITION);
 		}
 		
@@ -95,8 +131,13 @@ public class BCHSBot extends IterativeRobot {
 //		
 //		System.out.println("Distance and rate" + chasis.rightSideEncoder.getDistance() + "    " + chasis.rightSideEncoder.getRate());
 		
-        if (mainJoystick.getRawButton(1)) //Shoot
-        {
+		if (secondaryJoystick.getRawButton(8)){
+			chasis.retrieval.setArmPosition(Retrieval.Direction.up);
+		}
+		if (secondaryJoystick.getRawButton(9)){
+			chasis.retrieval.setArmPosition(Retrieval.Direction.down);
+		}
+        if (secondaryJoystick.getRawButton(1)){ //shoot
             chasis.retrieval.setArmPosition(Retrieval.Direction.up);
             chasis.retrieval.winch.release();
             chasis.retrieval.startTimer();
