@@ -12,7 +12,6 @@ public class Retrieval {
 	boolean movementEnabled;
 	double retrievalAngle;
 
-	
 	Solenoid upSolenoid, downPiston;
 	java.util.Timer timer, retrievalTimer;
 
@@ -30,22 +29,6 @@ public class Retrieval {
         }
     }
     
-    public static class Direction {
-
-		public final int value;
-		static final int up_val = 3;
-		static final int down_val = 4;
-		static final int error_val = -1;
-
-		public static final Direction error = new Direction(error_val);
-        public static final Direction up = new Direction(up_val);
-        public static final Direction down = new Direction(down_val);
-
-        private Direction(int value) {
-            this.value = value;
-        }
-    }
-	
 	private class RetrievalTask extends TimerTask{
 		private Retrieval retrieval;
 		

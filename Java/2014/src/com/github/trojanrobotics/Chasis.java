@@ -32,7 +32,6 @@ public class Chasis
         }
     }
 	
-		
         public Chasis(int[] rightChannels, int[] leftChannels ,int[] ultraSonicPingAndEcho, int[] leftEncoderChannels, int[] rightEncoderChannels)
         {
 			int[] winchChannels = {Config.WINCH_MOTOR, Config.WINCH_SWITCH, Config.WINCH_RELEASE_SOLENOID, Config.WINCH_RETRACT_SOLENOID};

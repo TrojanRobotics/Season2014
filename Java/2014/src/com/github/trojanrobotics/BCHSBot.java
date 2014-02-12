@@ -118,13 +118,13 @@ public class BCHSBot extends IterativeRobot {
 //		System.out.println("Distance and rate" + chasis.rightSideEncoder.getDistance() + "    " + chasis.rightSideEncoder.getRate());
 		
 		if (secondaryJoystick.getRawButton(8)){
-			chasis.retrieval.setArmPosition(Retrieval.Direction.up);
+			chasis.retrieval.setArmPosition(Direction.up);
 		} else if (secondaryJoystick.getRawButton(9)){
-			chasis.retrieval.setArmPosition(Retrieval.Direction.down);
+			chasis.retrieval.setArmPosition(Direction.down);
 		}
 		
-        if (secondaryJoystick.getRawButton(1)){ //shoot
-            chasis.retrieval.setArmPosition(Retrieval.Direction.up);
+        if (secondaryJoystick.getTrigger()){ //shoot
+            chasis.retrieval.setArmPosition(Direction.up);
             chasis.retrieval.winch.release();
             chasis.retrieval.startTimer();
         }
