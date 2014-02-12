@@ -89,6 +89,7 @@ public class BCHSBot extends IterativeRobot {
 			chasis.retrieval.beltMotor.set(-0.5);
 		}
 		
+		
 		if (secondaryJoystick.getRawButton(Config.RETRIEVAL_MANUAL_BUTTON)){
 			chasis.retrieval.setEnabled(false);
 			double secondaryYAxis = Lib.limitOutput(secondaryJoystick.getY());
@@ -104,7 +105,12 @@ public class BCHSBot extends IterativeRobot {
 			}
 
 		}
-			
+		if (chasis.retrieval.canFire() && secondaryJoystick.getTrigger()){ //shoot
+				chasis.retrieval.setArmPosition(Direction.up);
+				chasis.retrieval.winch.release();
+				chasis.retrieval.startTimer();
+		}
+		
 		x = mainJoystick.getX();
         y = mainJoystick.getY();
         x = Lib.signSquare(x);
@@ -132,11 +138,6 @@ public class BCHSBot extends IterativeRobot {
 			chasis.retrieval.setArmPosition(Direction.down);
 		}
 		
-        if (secondaryJoystick.getTrigger()){ //shoot
-            chasis.retrieval.setArmPosition(Direction.up);
-            chasis.retrieval.winch.release();
-            chasis.retrieval.startTimer();
-        }
     }
 
     public void testPeriodic() {

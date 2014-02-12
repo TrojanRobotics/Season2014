@@ -69,9 +69,12 @@ public class Retrieval {
         if (this.timer == null) {
             timer = new java.util.Timer();
             timer.schedule(new WinchTask(this), Config.WINCH_WAIT, 0);
-        }
+        } 
     }
 	
+	public boolean canFire(){
+		return this.timer == null;
+	}
 	public void setRetrieval(double speed) {
 		double potAngle = potentiometer.getAngle();
 		if (potAngle >= Config.MIN_POSITION + Config.BUFFER || potAngle <= Config.MAX_POSITION - Config.BUFFER){
@@ -106,6 +109,7 @@ public class Retrieval {
 	public void setEnabled(boolean isEnabled){
 		movementEnabled = isEnabled;
 	}
+	
 	
 	public void free(){
 		timer.cancel();
