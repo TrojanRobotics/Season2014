@@ -1,63 +1,58 @@
 package com.github.trojanrobotics;
 
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.Jaguar;
+import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.Timer;
 import java.util.TimerTask;
 
 public class Retrieval {
+	Talon beltMotor, retrievalAngleMotor;
+	Potentiometer potentiometer;
+	Winch winch;
+	double targetAngle;
+	boolean movementEnabled;
+	double retrievalAngle;
 
-    Jaguar retrievalMotor;
-    Jaguar beltMotor;
-    Winch winchMotor;
-    Encoder encoder1;
-    Solenoid upSolenoid, downPiston;
-    LimitSwitch limitSwitch;
-    java.util.Timer timer;
+	Solenoid upSolenoid, downPiston;
+	java.util.Timer timer, retrievalTimer;
 
     protected class WinchTask extends TimerTask
     {
-        Retrieval retrieval;
-        public WinchTask (Retrieval r){
-            retrieval = r;
+		Retrieval retrieval;
+		public WinchTask (Retrieval r){
+			retrieval = r;
         }
         
         public void run() {
-            retrieval.winchMotor.retract();
-            retrieval.timer.cancel();
-            retrieval.timer = null;
+			retrieval.winch.retract();
+			retrieval.timer.cancel();
+			retrieval.timer = null;
         }
     }
     
-    public static class Direction {
-
-        public final int value;
-        static final int up_val = 3;
-        static final int down_val = 4;
-        static final int error_val = -1;
-
-        public static final Direction error = new Direction(error_val);
-        public static final Direction up = new Direction(up_val);
-        public static final Direction down = new Direction(down_val);
-
-        private Direction(int value) {
-            this.value = value;
-        }
-    }
-
-    public Retrieval(Jaguar rM, Jaguar bM, Encoder e1, Winch wM) {
-        retrievalMotor = rM;
-        beltMotor = bM;
-        encoder1 = e1;
-        winchMotor = wM;
-        limitSwitch = new LimitSwitch(Config.WINCH_LIMITSWITCH, wM.winchMotor);
-        timer = new java.util.Timer();
-    }
-
-    public void setRetrieval(double speed) {
-        retrievalMotor.set(speed);
-    }
+	private class RetrievalTask extends TimerTask{
+		private Retrieval retrieval;
+		
+		public RetrievalTask(Retrieval r){
+			if (r == null){
+				throw new NullPointerException("requires retrieval for the task to run");
+			}
+			retrieval = r;
+		}
+		public void run(){
+			retrieval.calculate();
+		}
+	}
+	
+	public Retrieval (int retrievalAngleChannel, int beltChannel, int potChannel, int[] winchChannels) {
+        beltMotor = new Talon(beltChannel);
+		retrievalAngleMotor = new Talon(retrievalAngleChannel);
+		potentiometer = new Potentiometer(potChannel);
+		winch = new Winch(winchChannels[0], winchChannels[1], winchChannels[2], winchChannels[3]);
+		movementEnabled = false;
+		targetAngle = Config.HOME_POSITION;
+		retrievalTimer = new java.util.Timer();
+		retrievalTimer.schedule(new RetrievalTask(this), 0, (long)(0.05 * 1000));
+	}
 
     public void setArmPosition(Direction direction) {
         if (direction == Direction.up) {
@@ -76,4 +71,55 @@ public class Retrieval {
             timer.schedule(new WinchTask(this), Config.WINCH_WAIT, 0);
         }
     }
+	
+	public void setRetrieval(double speed) {
+        retrievalAngleMotor.set(speed);
+    }
+  
+    public void setAngleRetrieval(double angle){
+		targetAngle = angle; 
+	}
+    private void calculate() {
+		if (movementEnabled) {
+			double potAngle = potentiometer.getAngle();
+			double distanceRequired = (Math.abs(targetAngle - potAngle) / targetAngle);
+			double retrievalSpeed = 0.5 * distanceRequired;
+			
+			if (potAngle >= Config.MIN_POSITION || potAngle <= Config.MAX_POSITION){
+				if (potAngle < targetAngle) {
+					setRetrieval(retrievalSpeed);
+					System.out.println("go forwards" + potAngle);
+				} else if (potAngle > targetAngle) {
+					setRetrieval(-retrievalSpeed);
+					System.out.println("go backwards" + potAngle);
+				} else {
+					setRetrieval(0.0);
+					System.out.println("perfect" + potAngle);//stop motor
+				}
+			}
+		}
+//		retrievalAngle = chasis.retrieval.potentiometer.getAngle();
+//		System.out.println(retrievalAngle);
+//		if(retrievalAngle <= 20){
+//			chasis.retrieval.retrievalAngleMotor.set(0.0);
+//			chasis.retrieval.setAngleRetrieval(Config.RETRIEVE_POSITION);
+//		} else if (retrievalAngle >= 190){
+//			chasis.retrieval.retrievalAngleMotor.set(0.0);
+//			chasis.retrieval.setAngleRetrieval(Config.HOME_POSITION);
+//		} else {
+//			joystickRetrievalAngle = secondaryJoystick.getY();
+//			chasis.retrieval.retrievalAngleMotor.set(joystickRetrievalAngle);
+//		}
+	}
+	
+	public void setEnabled(boolean isEnabled){
+		movementEnabled = isEnabled;
+	}
+	
+	public void free(){
+		timer.cancel();
+		timer = null;
+		retrievalTimer.cancel();
+		retrievalTimer = null;
+	}
 }
