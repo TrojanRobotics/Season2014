@@ -19,6 +19,20 @@ public class Chasis
 		Retrieval retrieval;
         Solenoid gearShiftSolenoid;
 		
+		public static class Gear {
+		public final int value;
+		static final int gear1_val = 1;
+		static final int gear2_val = 2;
+
+        public static final Gear gearOne = new Gear(gear1_val);
+        public static final Gear gearTwo = new Gear(gear2_val);
+
+        private Gear(int value) {
+            this.value = value;
+        }
+    }
+	
+		
         public Chasis(int[] rightChannels, int[] leftChannels ,int[] ultraSonicPingAndEcho, int[] leftEncoderChannels, int[] rightEncoderChannels)
         {
 			int[] winchChannels = {Config.WINCH_MOTOR, Config.WINCH_SWITCH, Config.WINCH_RELEASE_SOLENOID, Config.WINCH_RETRACT_SOLENOID};
@@ -44,6 +58,14 @@ public class Chasis
 			driverStationLCD = DriverStationLCD.getInstance();       
         }                                                                                                      
  
+		public void gearShift(Gear gear){
+			if (gear == Gear.gearOne){
+				this.gearShiftSolenoid.set(false);
+			} else if (gear == Gear.gearTwo){
+				this.gearShiftSolenoid.set(true);
+			}
+		} 
+		
         public void set(double speed)
         {
             leftSide.set(speed);

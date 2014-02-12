@@ -10,6 +10,8 @@ public class Retrieval {
 	Winch winch;
 	double targetAngle;
 	boolean movementEnabled;
+	double retrievalAngle;
+
 	
 	Solenoid upSolenoid, downPiston;
 	java.util.Timer timer, retrievalTimer;
@@ -69,8 +71,6 @@ public class Retrieval {
 		retrievalTimer.schedule(new RetrievalTask(this), 0, (long)(0.05 * 1000));
 	}
 
-
-	
     public void setArmPosition(Direction direction) {
         if (direction == Direction.up) {
             upSolenoid.set(true);
@@ -92,31 +92,41 @@ public class Retrieval {
 	public void setRetrieval(double speed) {
         retrievalAngleMotor.set(speed);
     }
-    
+  
     public void setAngleRetrieval(double angle){
 		targetAngle = angle; 
-		double potAngle = potentiometer.getAngle();
-		while (potAngle != angle) {
-			this.calculate();
-		} 
 	}
     private void calculate() {
 		if (movementEnabled) {
 			double potAngle = potentiometer.getAngle();
 			double distanceRequired = (Math.abs(targetAngle - potAngle) / targetAngle);
 			double retrievalSpeed = 0.5 * distanceRequired;
-
-			if (potAngle < targetAngle) {
-				setRetrieval(retrievalSpeed);
-				System.out.println("go forwards" + potAngle);
-			} else if (potAngle > targetAngle) {
-				setRetrieval(-retrievalSpeed);
-				System.out.println("go backwards" + potAngle);
-			} else {
-				setRetrieval(0.0);
-				System.out.println("perfect" + potAngle);//stop motor
+			
+			if (potAngle >= Config.MIN_POSITION || potAngle <= Config.MAX_POSITION){
+				if (potAngle < targetAngle) {
+					setRetrieval(retrievalSpeed);
+					System.out.println("go forwards" + potAngle);
+				} else if (potAngle > targetAngle) {
+					setRetrieval(-retrievalSpeed);
+					System.out.println("go backwards" + potAngle);
+				} else {
+					setRetrieval(0.0);
+					System.out.println("perfect" + potAngle);//stop motor
+				}
 			}
 		}
+//		retrievalAngle = chasis.retrieval.potentiometer.getAngle();
+//		System.out.println(retrievalAngle);
+//		if(retrievalAngle <= 20){
+//			chasis.retrieval.retrievalAngleMotor.set(0.0);
+//			chasis.retrieval.setAngleRetrieval(Config.RETRIEVE_POSITION);
+//		} else if (retrievalAngle >= 190){
+//			chasis.retrieval.retrievalAngleMotor.set(0.0);
+//			chasis.retrieval.setAngleRetrieval(Config.HOME_POSITION);
+//		} else {
+//			joystickRetrievalAngle = secondaryJoystick.getY();
+//			chasis.retrieval.retrievalAngleMotor.set(joystickRetrievalAngle);
+//		}
 	}
 	
 	public void setEnabled(boolean isEnabled){

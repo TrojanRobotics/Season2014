@@ -20,13 +20,11 @@ public class BCHSBot extends IterativeRobot {
 		mainJoystick = new Joystick(Config.MAIN_JOYSTICK);
 		secondaryJoystick = new Joystick(Config.SECONDARY_JOYSTICK);
 		cam = new Camera();
-		chasis.gearShiftSolenoid.set(false);
 		
 		if(Config.TEST_BOT){
 			chasis = new Chasis(Config.TEST_LDRIVE, Config.TEST_RDRIVE, Config.ULTRASONIC, Config.LEFT_ENCODER, Config.RIGHT_ENCODER);
-			//chasis = new Chasis(Config.TEST_LDRIVE, Config.TEST_RDRIVE, Config.ULTRASONIC, Config.LEFT_ENCODER, Config.RIGHT_ENCODER, Config.);
 		} else {
-			//chasis = new Chasis(Config.LDRIVE, Config.RDRIVE, Config.ULTRASONIC, Config.LEFT_ENCODER, Config.RIGHT_ENCODER);
+			chasis = new Chasis(Config.LDRIVE, Config.RDRIVE, Config.ULTRASONIC, Config.LEFT_ENCODER, Config.RIGHT_ENCODER);
 		}
 		LiveWindow.addActuator("Left Side", "Value", chasis.leftSide.talOne);
 		LiveWindow.addActuator("Left Side", "Value", chasis.leftSide.talTwo);
@@ -72,26 +70,14 @@ public class BCHSBot extends IterativeRobot {
 	public void teleopPeriodic() {
 		inches = chasis.ultrasonic.getRangeInches();
 		System.out.println(inches);
-		
-		
-		retrievalAngle = chasis.retrieval.potentiometer.getAngle();
-		System.out.println(retrievalAngle);
-		if(retrievalAngle <= 20){
-			chasis.retrieval.retrievalAngleMotor.set(0.0);
-			chasis.retrieval.setAngleRetrieval(Config.RETRIEVE_POSITION);
-		} else if (retrievalAngle >= 190){
-			chasis.retrieval.retrievalAngleMotor.set(0.0);
-			chasis.retrieval.setAngleRetrieval(Config.HOME_POSITION);
-		} else {
-			joystickRetrievalAngle = secondaryJoystick.getY();
-			chasis.retrieval.retrievalAngleMotor.set(joystickRetrievalAngle);
+//		if(inches >= 36 && inches <= 72){
+//			Config.LIGHTS;
+//		}
+		if (secondaryJoystick.getRawButton(10)){
+			chasis.gearShift(Chasis.Gear.gearOne);
+		} else if (secondaryJoystick.getRawButton(11)){
+			chasis.gearShift(Chasis.Gear.gearTwo);
 		}
-		
-		if (secondaryJoystick.getRawButton(10)) {
-			chasis.gearShiftSolenoid.set(true);
-		} else if (secondaryJoystick.getRawButton(11)) {
-			chasis.gearShiftSolenoid.set(false);
-		} 
 		
 		if (mainJoystick.getRawButton(6)){
 			chasis.retrieval.beltMotor.set(0.5);
@@ -133,10 +119,10 @@ public class BCHSBot extends IterativeRobot {
 		
 		if (secondaryJoystick.getRawButton(8)){
 			chasis.retrieval.setArmPosition(Retrieval.Direction.up);
-		}
-		if (secondaryJoystick.getRawButton(9)){
+		} else if (secondaryJoystick.getRawButton(9)){
 			chasis.retrieval.setArmPosition(Retrieval.Direction.down);
 		}
+		
         if (secondaryJoystick.getRawButton(1)){ //shoot
             chasis.retrieval.setArmPosition(Retrieval.Direction.up);
             chasis.retrieval.winch.release();
@@ -144,9 +130,6 @@ public class BCHSBot extends IterativeRobot {
         }
     }
 
-    /**
-     * This function is called periodically during test mode
-     */
     public void testPeriodic() {
 
     }
