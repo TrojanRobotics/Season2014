@@ -46,8 +46,10 @@ public class Config {
 	static final int HOME_POSITION = 180;
 	static final int MAX_POSITION = 190;
 	static final int MIN_POSITION = 20;
+	static final int BUFFER = 10;
 	
 	static final int SHOOT_POSITION_BUTTON = 6;
 	static final int RETRIEVE_POSITION_BUTTON = 7;
 	static final int HOME_POSITION_BUTTON = 8;
+	static final int RETRIEVAL_MANUAL_BUTTON = 9;
 }

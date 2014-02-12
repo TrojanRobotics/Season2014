@@ -73,7 +73,12 @@ public class Retrieval {
     }
 	
 	public void setRetrieval(double speed) {
-        retrievalAngleMotor.set(speed);
+		double potAngle = potentiometer.getAngle();
+		if (potAngle >= Config.MIN_POSITION + Config.BUFFER || potAngle <= Config.MAX_POSITION - Config.BUFFER){
+			retrievalAngleMotor.set(speed);
+		} else {
+			retrievalAngleMotor.disable();
+		}
     }
   
     public void setAngleRetrieval(double angle){
@@ -85,7 +90,6 @@ public class Retrieval {
 			double distanceRequired = (Math.abs(targetAngle - potAngle) / targetAngle);
 			double retrievalSpeed = 0.5 * distanceRequired;
 			
-			if (potAngle >= Config.MIN_POSITION || potAngle <= Config.MAX_POSITION){
 				if (potAngle < targetAngle) {
 					setRetrieval(retrievalSpeed);
 					System.out.println("go forwards" + potAngle);
@@ -98,19 +102,6 @@ public class Retrieval {
 				}
 			}
 		}
-//		retrievalAngle = chasis.retrieval.potentiometer.getAngle();
-//		System.out.println(retrievalAngle);
-//		if(retrievalAngle <= 20){
-//			chasis.retrieval.retrievalAngleMotor.set(0.0);
-//			chasis.retrieval.setAngleRetrieval(Config.RETRIEVE_POSITION);
-//		} else if (retrievalAngle >= 190){
-//			chasis.retrieval.retrievalAngleMotor.set(0.0);
-//			chasis.retrieval.setAngleRetrieval(Config.HOME_POSITION);
-//		} else {
-//			joystickRetrievalAngle = secondaryJoystick.getY();
-//			chasis.retrieval.retrievalAngleMotor.set(joystickRetrievalAngle);
-//		}
-	}
 	
 	public void setEnabled(boolean isEnabled){
 		movementEnabled = isEnabled;

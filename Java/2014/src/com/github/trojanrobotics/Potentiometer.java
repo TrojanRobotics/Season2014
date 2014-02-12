@@ -16,9 +16,8 @@ public class Potentiometer
 	public double getAngle()
 	{
 		double voltDegreeRound = (double) MathUtils.round(channel.getVoltage()*1000);
-		double voltRound = (double) voltDegreeRound/1000;
-		double a = (double) ((360*voltRound)/5);
-		double angle = (double) a;
+		double voltRound = voltDegreeRound/1000.0;
+		double angle = ((360.0*voltRound)/5.0);
 		return angle;
 	}
 	

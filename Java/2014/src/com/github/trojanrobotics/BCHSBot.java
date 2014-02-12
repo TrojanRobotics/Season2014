@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.DriverStationLCD;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class BCHSBot extends IterativeRobot {
 	Joystick mainJoystick, secondaryJoystick;
@@ -70,9 +71,12 @@ public class BCHSBot extends IterativeRobot {
 	public void teleopPeriodic() {
 		inches = chasis.ultrasonic.getRangeInches();
 		System.out.println(inches);
-//		if(inches >= 36 && inches <= 72){
-//			Config.LIGHTS;
-//		}
+		if(inches >= 36 && inches <= 72) {
+			SmartDashboard.putString("kInRange", "We're in range");
+		} else {
+			SmartDashboard.putString("kInRange", "We're not in range");
+		}
+		
 		if (secondaryJoystick.getRawButton(10)){
 			chasis.gearShift(Chasis.Gear.gearOne);
 		} else if (secondaryJoystick.getRawButton(11)){
@@ -84,18 +88,23 @@ public class BCHSBot extends IterativeRobot {
 		} else if (mainJoystick.getRawButton(7)){
 			chasis.retrieval.beltMotor.set(-0.5);
 		}
-	
-		if(secondaryJoystick.getRawButton(Config.HOME_POSITION_BUTTON)){
-			chasis.retrieval.setEnabled(true);
-			chasis.retrieval.setAngleRetrieval(Config.HOME_POSITION);
-		} else if(secondaryJoystick.getRawButton(Config.SHOOT_POSITION_BUTTON)){
-			chasis.retrieval.setEnabled(true);
-			chasis.retrieval.setAngleRetrieval(Config.SHOOT_POSITION);
-		} else if(secondaryJoystick.getRawButton(Config.RETRIEVE_POSITION_BUTTON)){
-			chasis.retrieval.setEnabled(true);
-			chasis.retrieval.setAngleRetrieval(Config.RETRIEVE_POSITION);
-		}
 		
+		if (secondaryJoystick.getRawButton(Config.RETRIEVAL_MANUAL_BUTTON)){
+			chasis.retrieval.setEnabled(false);
+			double secondaryYAxis = Lib.limitOutput(secondaryJoystick.getY());
+			chasis.retrieval.setRetrieval(secondaryYAxis);
+		} else {
+			chasis.retrieval.setEnabled(true);
+			if(secondaryJoystick.getRawButton(Config.HOME_POSITION_BUTTON)){
+				chasis.retrieval.setAngleRetrieval(Config.HOME_POSITION);
+			} else if(secondaryJoystick.getRawButton(Config.SHOOT_POSITION_BUTTON)){
+				chasis.retrieval.setAngleRetrieval(Config.SHOOT_POSITION);
+			} else if(secondaryJoystick.getRawButton(Config.RETRIEVE_POSITION_BUTTON)){
+				chasis.retrieval.setAngleRetrieval(Config.RETRIEVE_POSITION);
+			}
+
+		}
+			
 		x = mainJoystick.getX();
         y = mainJoystick.getY();
         x = Lib.signSquare(x);
