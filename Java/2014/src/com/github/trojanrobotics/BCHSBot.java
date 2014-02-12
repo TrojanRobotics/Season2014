@@ -20,7 +20,7 @@ public class BCHSBot extends IterativeRobot {
 	public void robotInit() {
 		mainJoystick = new Joystick(Config.MAIN_JOYSTICK);
 		secondaryJoystick = new Joystick(Config.SECONDARY_JOYSTICK);
-		cam = new Camera();
+		//cam = new Camera();
 		
 		if(Config.TEST_BOT){
 			chasis = new Chasis(Config.TEST_LDRIVE, Config.TEST_RDRIVE, Config.ULTRASONIC, Config.LEFT_ENCODER, Config.RIGHT_ENCODER);
@@ -84,13 +84,17 @@ public class BCHSBot extends IterativeRobot {
 		}
 		
 		if (mainJoystick.getRawButton(6)){
+			System.out.println("BELT 0.5");
 			chasis.retrieval.beltMotor.set(0.5);
 		} else if (mainJoystick.getRawButton(7)){
+			System.out.println("BELT -0.5");
 			chasis.retrieval.beltMotor.set(-0.5);
+		} else {
+			chasis.retrieval.beltMotor.set(0.0);
 		}
 		
 		
-		if (secondaryJoystick.getRawButton(Config.RETRIEVAL_MANUAL_BUTTON)){
+		if (mainJoystick.getRawButton(Config.RETRIEVAL_MANUAL_BUTTON)){
 			chasis.retrieval.setEnabled(false);
 			double secondaryYAxis = Lib.limitOutput(secondaryJoystick.getY());
 			chasis.retrieval.setRetrieval(secondaryYAxis);
@@ -103,9 +107,10 @@ public class BCHSBot extends IterativeRobot {
 			} else if(secondaryJoystick.getRawButton(Config.RETRIEVE_POSITION_BUTTON)){
 				chasis.retrieval.setAngleRetrieval(Config.RETRIEVE_POSITION);
 			}
-
 		}
+		
 		if (chasis.retrieval.canFire() && secondaryJoystick.getTrigger()){ //shoot
+				chasis.retrieval.setAngleRetrieval(Config.SHOOT_POSITION);
 				chasis.retrieval.setArmPosition(Direction.up);
 				chasis.retrieval.winch.release();
 				chasis.retrieval.startTimer();

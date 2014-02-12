@@ -37,6 +37,7 @@ public class LimitSwitch extends SafetyObject {
         isInverted = false;
         motor = m;
         
+		controlLoop = new java.util.Timer();
         controlLoop.schedule(new LimitTask(this), 0L, (long) (period *1000));
     }
     

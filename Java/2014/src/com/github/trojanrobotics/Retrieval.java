@@ -52,6 +52,10 @@ public class Retrieval {
 		targetAngle = Config.HOME_POSITION;
 		retrievalTimer = new java.util.Timer();
 		retrievalTimer.schedule(new RetrievalTask(this), 0, (long)(0.05 * 1000));
+		
+		//TODO: Constant name
+		upSolenoid = new Solenoid(2);
+		downPiston = new Solenoid(5);
 	}
 
     public void setArmPosition(Direction direction) {
@@ -75,6 +79,7 @@ public class Retrieval {
 	public boolean canFire(){
 		return this.timer == null;
 	}
+	
 	public void setRetrieval(double speed) {
 		double potAngle = potentiometer.getAngle();
 		if (potAngle >= Config.MIN_POSITION + Config.BUFFER || potAngle <= Config.MAX_POSITION - Config.BUFFER){
@@ -88,20 +93,20 @@ public class Retrieval {
 		targetAngle = angle; 
 	}
     private void calculate() {
-		if (movementEnabled) {
+		if (movementEnabled && false) {
 			double potAngle = potentiometer.getAngle();
 			double distanceRequired = (Math.abs(targetAngle - potAngle) / targetAngle);
 			double retrievalSpeed = 0.5 * distanceRequired;
 			
 				if (potAngle < targetAngle) {
 					setRetrieval(retrievalSpeed);
-					System.out.println("go forwards" + potAngle);
+					//System.out.println("go forwards" + potAngle);
 				} else if (potAngle > targetAngle) {
 					setRetrieval(-retrievalSpeed);
-					System.out.println("go backwards" + potAngle);
+					//System.out.println("go backwards" + potAngle);
 				} else {
 					setRetrieval(0.0);
-					System.out.println("perfect" + potAngle);//stop motor
+					//System.out.println("perfect" + potAngle);//stop motor
 				}
 			}
 		}

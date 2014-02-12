@@ -17,7 +17,7 @@ public class Chasis
         Compressor compressor;
 		DriverStationLCD driverStationLCD;
 		Retrieval retrieval;
-        Solenoid gearShiftSolenoid;
+        Solenoid gearShiftSolenoidOne, gearShiftSolenoidTwo;
 		
 		public static class Gear {
 		public final int value;
@@ -44,7 +44,8 @@ public class Chasis
 			rightSideEncoder.setPIDSourceParameter(PIDSource.PIDSourceParameter.kDistance);
 			leftSideEncoder.setDistancePerPulse(Config.LEFT_DRIVE_DPP);
 			rightSideEncoder.setDistancePerPulse(Config.RIGHT_DRIVE_DPP); 
-			gearShiftSolenoid = new Solenoid(Config.GEAR_SHIFT_SOLENOID);
+			gearShiftSolenoidOne = new Solenoid(Config.GEAR_SHIFT_SOLENOID_ONE);
+			gearShiftSolenoidTwo = new Solenoid(Config.GEAR_SHIFT_SOLENOID_TWO);
 			leftSideEncoder.setReverseDirection(true);
 			rightSideEncoder.setReverseDirection(true);
 			leftSideEncoder.start();
@@ -54,14 +55,20 @@ public class Chasis
 			leftSidePID = new PIDController(Config.PID[0], Config.PID[1], Config.PID[2], leftSideEncoder, leftSide);
 			compressor = new Compressor(Config.COMPRESSOR[0], Config.COMPRESSOR[1]);
 			compressor.start();
-			driverStationLCD = DriverStationLCD.getInstance();       
-        }                                                                                                      
+			driverStationLCD = DriverStationLCD.getInstance();   
+			this.gearShift(Gear.gearOne);
+        }                                            
  
 		public void gearShift(Gear gear){
 			if (gear == Gear.gearOne){
-				this.gearShiftSolenoid.set(false);
+				System.out.println("GearOne");
+				this.gearShiftSolenoidTwo.set(false);
+				this.gearShiftSolenoidOne.set(true);
 			} else if (gear == Gear.gearTwo){
-				this.gearShiftSolenoid.set(true);
+				System.out.println("GearTwo");
+				this.gearShiftSolenoidOne.set(false);
+				this.gearShiftSolenoidTwo.set(true);
+				
 			}
 		} 
 		
