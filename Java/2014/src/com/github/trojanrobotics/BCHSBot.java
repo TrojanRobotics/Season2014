@@ -14,7 +14,7 @@ public class BCHSBot extends IterativeRobot {
 	double inches;
 	double retrievalAngle,joystickRetrievalAngle, retrievalMotor;
 	Chasis chasis;
-	boolean autoRunOnce;
+	boolean autoRunOnce, gear;
 	Camera cam;
 
 	public void robotInit() {
@@ -32,14 +32,15 @@ public class BCHSBot extends IterativeRobot {
 		LiveWindow.addActuator("Right Side", "Value", chasis.leftSide.talOne);
 		LiveWindow.addActuator("Left Side", "Value", chasis.leftSide.talTwo);
 		LiveWindow.addActuator("PID", "leftPID", chasis.leftSidePID);
-		LiveWindow.addActuator("PID", "rightPID", chasis.rightSidePID);
-		
+		LiveWindow.addActuator("PID", "rightPID", chasis.rightSidePID);		 
 	}
 	
 	public void disabledPeriodic(){
 		chasis.stop();
 		chasis.reset();
+		chasis.retrieval.setEnabled(false);
 		autoRunOnce = true;
+		chasis.retrieval.setAngleRetrieval(chasis.retrieval.potentiometer.getAngle());
     }
 	
 	public void autonomousPeriodic() {
@@ -49,6 +50,8 @@ public class BCHSBot extends IterativeRobot {
 			//chasis.set(0.5);
 			autoRunOnce = false;
 		}
+		
+		
 		String clear = "                         ";
 		chasis.driverStationLCD.println(DriverStationLCD.Line.kUser1, 1, clear);
 		chasis.driverStationLCD.updateLCD();
@@ -68,38 +71,61 @@ public class BCHSBot extends IterativeRobot {
 //                }
 	}
 	
-	public void teleopPeriodic() {
-		inches = chasis.ultrasonic.getRangeInches();
-		System.out.println(inches);
-		if(inches >= 36 && inches <= 72) {
-			SmartDashboard.putString("kInRange", "We're in range");
-		} else {
-			SmartDashboard.putString("kInRange", "We're not in range");
+	public void teleopPeriodic() {	
+		if(chasis.currentGear){
+			SmartDashboard.putString("Current gear", "High Gear");
+		} else {			
+			SmartDashboard.putString("Current gear", "Low Gear");
 		}
 		
-		if (secondaryJoystick.getRawButton(10)){
+		SmartDashboard.putBoolean("kWinchLimitSwitch", chasis.retrieval.winch.limitSwitch.get());
+//		inches = chasis.ultrasonic.getRangeInches();
+		////System.out.println(inches);
+//		if(inches >= 36 && inches <= 72) {
+//			SmartDashboard.putString("kInRange", "We're in range");
+//		} else {
+//			SmartDashboard.putString("kInRange", "We're not in range");
+//		}
+		SmartDashboard.putBoolean("kBeamSensor", chasis.retrieval.beamSensor.get());
+		SmartDashboard.putNumber("kUltrasonic", inches);
+		SmartDashboard.putNumber("kPotentiometerAngle", chasis.retrieval.potentiometer.getAngle());
+		
+		if (mainJoystick.getRawButton(6)){
 			chasis.gearShift(Chasis.Gear.gearOne);
-		} else if (secondaryJoystick.getRawButton(11)){
+		} else if (mainJoystick.getRawButton(7)){
 			chasis.gearShift(Chasis.Gear.gearTwo);
 		}
 		
-		if (mainJoystick.getRawButton(6)){
-			System.out.println("BELT 0.5");
+		if (mainJoystick.getRawButton(9)){
+			//System.out.println("BELT 0.5");
 			chasis.retrieval.beltMotor.set(0.5);
-		} else if (mainJoystick.getRawButton(7)){
-			System.out.println("BELT -0.5");
+		} else if (mainJoystick.getRawButton(8)){
+			//System.out.println("BELT -0.5");
 			chasis.retrieval.beltMotor.set(-0.5);
 		} else {
 			chasis.retrieval.beltMotor.set(0.0);
 		}
 		
+		if (secondaryJoystick.getRawButton(8)){
+			chasis.retrieval.winch.retract();
+			//System.out.println("Pressed button");
+		}
 		
-		if (mainJoystick.getRawButton(Config.RETRIEVAL_MANUAL_BUTTON)){
+		if (secondaryJoystick.getRawButton(9)){
+			chasis.retrieval.winch.release();
+		}
+		
+		if (secondaryJoystick.getRawButton(Config.RETRIEVAL_MANUAL_BUTTON)){
+			//System.out.println("ZZZZZZ");
 			chasis.retrieval.setEnabled(false);
-			double secondaryYAxis = Lib.limitOutput(secondaryJoystick.getY());
+			double secondaryYAxis = Lib.limitOutput(secondaryJoystick.getY() * 0.5);
+			//System.out.println("Angle == " + secondaryYAxis);
+			SmartDashboard.putNumber("kOverride", secondaryYAxis);
 			chasis.retrieval.setRetrieval(secondaryYAxis);
+			chasis.retrieval.setAngleRetrieval(chasis.retrieval.potentiometer.getAngle());
 		} else {
 			chasis.retrieval.setEnabled(true);
+			//System.out.println("XXXXXXX");
 			if(secondaryJoystick.getRawButton(Config.HOME_POSITION_BUTTON)){
 				chasis.retrieval.setAngleRetrieval(Config.HOME_POSITION);
 			} else if(secondaryJoystick.getRawButton(Config.SHOOT_POSITION_BUTTON)){
@@ -109,12 +135,16 @@ public class BCHSBot extends IterativeRobot {
 			}
 		}
 		
-		if (chasis.retrieval.canFire() && secondaryJoystick.getTrigger()){ //shoot
-				chasis.retrieval.setAngleRetrieval(Config.SHOOT_POSITION);
-				chasis.retrieval.setArmPosition(Direction.up);
-				chasis.retrieval.winch.release();
-				chasis.retrieval.startTimer();
-		}
+//		if(chasis.retrieval.winch.canMoveRetrieval){
+//			if (chasis.retrieval.canFire() && secondaryJoystick.getTrigger()){ //shoot
+//				chasis.retrieval.setAngleRetrieval(Config.SHOOT_POSITION);
+//				chasis.retrieval.setArmPosition(Direction.up);
+//				chasis.retrieval.winch.release();
+//				chasis.retrieval.startTimer();
+//		} else {
+//				
+//			}
+//		}
 		
 		x = mainJoystick.getX();
         y = mainJoystick.getY();
@@ -137,9 +167,9 @@ public class BCHSBot extends IterativeRobot {
 //		
 //		System.out.println("Distance and rate" + chasis.rightSideEncoder.getDistance() + "    " + chasis.rightSideEncoder.getRate());
 		
-		if (secondaryJoystick.getRawButton(8)){
+		if (secondaryJoystick.getRawButton(4)){
 			chasis.retrieval.setArmPosition(Direction.up);
-		} else if (secondaryJoystick.getRawButton(9)){
+		} else if (secondaryJoystick.getRawButton(5)){
 			chasis.retrieval.setArmPosition(Direction.down);
 		}
 		

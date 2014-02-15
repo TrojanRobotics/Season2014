@@ -7,6 +7,7 @@ public class Winch {
     Talon winchMotor;
     LimitSwitch limitSwitch;
     Solenoid releaseSolenoid, retractSolenoid;
+	boolean canMoveRetrieval;
     
     public Winch (int winchChannel, int limitChannel, int releaseChannel, int retractChannel) {
         winchMotor = new Talon(winchChannel);
@@ -19,14 +20,17 @@ public class Winch {
     }
     
     public void release() {
+		canMoveRetrieval = false;
         winchMotor.stopMotor();
         retractSolenoid.set(false);
         releaseSolenoid.set(true);
     }
     public void retract() {
+		canMoveRetrieval = true;
         releaseSolenoid.set(false);
         retractSolenoid.set(true);
-        winchMotor.set(0.5);
+        winchMotor.set(1.0);
+		System.out.println(winchMotor.getSpeed());
     }
     
     public void stop() {

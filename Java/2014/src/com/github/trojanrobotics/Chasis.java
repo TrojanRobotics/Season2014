@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.Solenoid;
 
 public class Chasis 
 {
-        Bundle leftSide, rightSide;      
+        Bundle leftSide, rightSide;   
         Ultrasonic ultrasonic;
         PIDController leftSidePID, rightSidePID;
         Encoder leftSideEncoder, rightSideEncoder;
@@ -18,6 +18,7 @@ public class Chasis
 		DriverStationLCD driverStationLCD;
 		Retrieval retrieval;
         Solenoid gearShiftSolenoidOne, gearShiftSolenoidTwo;
+		boolean currentGear;
 		
 		public static class Gear {
 		public final int value;
@@ -50,7 +51,7 @@ public class Chasis
 			rightSideEncoder.setReverseDirection(true);
 			leftSideEncoder.start();
 			rightSideEncoder.start();
-			ultrasonic = new Ultrasonic(ultraSonicPingAndEcho[0], ultraSonicPingAndEcho[1]);
+			//ultrasonic = new Ultrasonic(ultraSonicPingAndEcho[0], ultraSonicPingAndEcho[1]);
 			rightSidePID = new PIDController(Config.PID[0], Config.PID[1], Config.PID[2], rightSideEncoder, rightSide);
 			leftSidePID = new PIDController(Config.PID[0], Config.PID[1], Config.PID[2], leftSideEncoder, leftSide);
 			compressor = new Compressor(Config.COMPRESSOR[0], Config.COMPRESSOR[1]);
@@ -61,14 +62,15 @@ public class Chasis
  
 		public void gearShift(Gear gear){
 			if (gear == Gear.gearOne){
+				currentGear = true;
 				System.out.println("GearOne");
 				this.gearShiftSolenoidTwo.set(false);
 				this.gearShiftSolenoidOne.set(true);
 			} else if (gear == Gear.gearTwo){
+				currentGear = false;
 				System.out.println("GearTwo");
 				this.gearShiftSolenoidOne.set(false);
 				this.gearShiftSolenoidTwo.set(true);
-				
 			}
 		} 
 		

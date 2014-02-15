@@ -26,8 +26,11 @@ public class LimitSwitch extends SafetyObject {
         public void run() {
             if (l_switch.get())
             {
-                motor.disable();
-            }
+                ////System.out.println("Limit Switchj Hit.......");
+				motor.disable();
+            }////else{
+			////	System.out.println("Limit Hit off");
+			////}
         }
         
     }

@@ -3,6 +3,7 @@ package com.github.trojanrobotics;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.Solenoid;
 import java.util.TimerTask;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Retrieval {
 	Talon beltMotor, retrievalAngleMotor;
@@ -11,6 +12,7 @@ public class Retrieval {
 	double targetAngle;
 	boolean movementEnabled;
 	double retrievalAngle;
+	BeamSensor beamSensor;
 
 	Solenoid upSolenoid, downPiston;
 	java.util.Timer timer, retrievalTimer;
@@ -52,6 +54,7 @@ public class Retrieval {
 		targetAngle = Config.HOME_POSITION;
 		retrievalTimer = new java.util.Timer();
 		retrievalTimer.schedule(new RetrievalTask(this), 0, (long)(0.05 * 1000));
+		beamSensor = new BeamSensor(Config.BEAM_SENSOR);
 		
 		//TODO: Constant name
 		upSolenoid = new Solenoid(2);
@@ -81,10 +84,15 @@ public class Retrieval {
 	}
 	
 	public void setRetrieval(double speed) {
+		
+		SmartDashboard.putNumber("kRetrievalSpeed", speed);
 		double potAngle = potentiometer.getAngle();
+		
 		if (potAngle >= Config.MIN_POSITION + Config.BUFFER || potAngle <= Config.MAX_POSITION - Config.BUFFER){
+			System.out.println("LLLLLLLLLLLLLLLLLLL " + potAngle );
 			retrievalAngleMotor.set(speed);
 		} else {
+			System.out.println("AAAAAAAAAAAAAAAAAA " + potAngle );
 			retrievalAngleMotor.disable();
 		}
     }
@@ -92,23 +100,54 @@ public class Retrieval {
     public void setAngleRetrieval(double angle){
 		targetAngle = angle; 
 	}
+	
     private void calculate() {
-		if (movementEnabled && false) {
+		SmartDashboard.putNumber("kTargetAngle", targetAngle);
+		
+		if (movementEnabled) {
+			SmartDashboard.putBoolean("kMovementEnabled", movementEnabled);
+			
 			double potAngle = potentiometer.getAngle();
 			double distanceRequired = (Math.abs(targetAngle - potAngle) / targetAngle);
-			double retrievalSpeed = 0.5 * distanceRequired;
+			double retrievalSpeed;
+			int someName = 0;
 			
-				if (potAngle < targetAngle) {
-					setRetrieval(retrievalSpeed);
-					//System.out.println("go forwards" + potAngle);
-				} else if (potAngle > targetAngle) {
+			if(distanceRequired >= 0.75){
+				retrievalSpeed = 0.65;
+				someName = 1;
+			} else if (distanceRequired <= 0.10) {
+				retrievalSpeed = 0.35;
+				someName = 2;
+			} else {
+				someName = 3;
+				retrievalSpeed = 0.55;
+			}
+			
+			SmartDashboard.putBoolean("kOpenOrClosed", upSolenoid.get());
+			SmartDashboard.putNumber("kSomeNumber", someName);
+			SmartDashboard.putNumber("kPotAngle", potAngle);
+			SmartDashboard.putNumber("kDistanceRequired", distanceRequired);
+			SmartDashboard.putNumber("kRetrievalSpeed", retrievalSpeed);
+			
+			//tolerance
+				if (potAngle < targetAngle - Config.BUFFER) {
 					setRetrieval(-retrievalSpeed);
+					//System.out.println("go forwards" + potAngle);
+				} else if (potAngle > targetAngle + Config.BUFFER) {
+					setRetrieval(retrievalSpeed);
 					//System.out.println("go backwards" + potAngle);
 				} else {
-					setRetrieval(0.0);
+					if((potAngle < 200 && potAngle > 160)){
+						setRetrieval(0.0);
+					} else {
+						setRetrieval(0.2);
+					}
 					//System.out.println("perfect" + potAngle);//stop motor
 				}
-			}
+			}////else{
+			 ////System.out.println("Movement NOT Enabled...");
+			////}
+		
 		}
 	
 	public void setEnabled(boolean isEnabled){
