@@ -39,8 +39,8 @@ public class LimitSwitch extends SafetyObject {
         digital_Input = new DigitalInput(channel);
         isInverted = false;
         motor = m;
-        
-		controlLoop = new java.util.Timer();
+        controlLoop = new java.util.Timer();
+
         controlLoop.schedule(new LimitTask(this), 0L, (long) (period *1000));
     }
     
